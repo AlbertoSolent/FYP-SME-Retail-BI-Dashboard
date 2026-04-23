@@ -54,7 +54,7 @@ Ensure you have the following installed on your local machine:
 3. Start the React development server:
    ```bash
    npm run dev
-4. The dashboard should now be accessible in your browser at http://localhost:3000 (or the port specified by Vite/Create React App).
+4. The dashboard should now be accessible in your browser at `http://localhost:3000` (or the port specified by Vite/Create React App).
 
 ## 🎓 Academic Information
 * Author: Alberto Dimitrov
