@@ -3,9 +3,12 @@ const router = express.Router();
 const pool = require('../config/db');
 
 // GET /api/kpis/revenue
-// Returns monthly revenue and profit margins for the last 6 months
+// Returns monthly revenue and profit margins
+// Optional query: ?month=2026-04 to get a specific month's summary
 router.get('/revenue', async (req, res) => {
   try {
+    const { month } = req.query;
+
     const [rows] = await pool.query(`
       SELECT
         DATE_FORMAT(st.transaction_date, '%Y-%m') AS month,
@@ -21,9 +24,18 @@ router.get('/revenue', async (req, res) => {
       ORDER BY month ASC
     `);
 
-    // Current month summary
-    const currentMonth = rows.length > 0 ? rows[rows.length - 1] : null;
-    const previousMonth = rows.length > 1 ? rows[rows.length - 2] : null;
+    // If a specific month is requested, find it; otherwise use latest
+    let currentMonth;
+    let previousMonth;
+
+    if (month) {
+      const idx = rows.findIndex((r) => r.month === month);
+      currentMonth = idx >= 0 ? rows[idx] : null;
+      previousMonth = idx > 0 ? rows[idx - 1] : null;
+    } else {
+      currentMonth = rows.length > 0 ? rows[rows.length - 1] : null;
+      previousMonth = rows.length > 1 ? rows[rows.length - 2] : null;
+    }
 
     let percentChange = null;
     if (currentMonth && previousMonth && previousMonth.total_revenue > 0) {
@@ -74,8 +86,18 @@ router.get('/low-stock', async (req, res) => {
 
 // GET /api/kpis/top-products
 // Returns best-selling products by total quantity sold
+// Optional query: ?month=2026-04 to filter by month
 router.get('/top-products', async (req, res) => {
   try {
+    const { month } = req.query;
+
+    let whereClause = '';
+    const params = [];
+    if (month) {
+      whereClause = 'WHERE DATE_FORMAT(st.transaction_date, \'%Y-%m\') = ?';
+      params.push(month);
+    }
+
     const [rows] = await pool.query(`
       SELECT
         p.product_id,
@@ -86,10 +108,11 @@ router.get('/top-products', async (req, res) => {
       FROM Sales_Transactions st
       JOIN Products p ON st.product_id = p.product_id
       JOIN Categories c ON p.category_id = c.category_id
+      ${whereClause}
       GROUP BY p.product_id, p.name, c.category_name
       ORDER BY total_units_sold DESC
       LIMIT 10
-    `);
+    `, params);
 
     res.json({
       topProduct: rows.length > 0 ? rows[0] : null,
