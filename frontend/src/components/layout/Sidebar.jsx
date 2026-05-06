@@ -1,11 +1,4 @@
-import { BarChart3, Package, TrendingUp, AlertTriangle } from 'lucide-react';
-
-const navItems = [
-  { icon: BarChart3, label: 'Dashboard', active: true },
-  { icon: TrendingUp, label: 'Revenue' },
-  { icon: Package, label: 'Inventory' },
-  { icon: AlertTriangle, label: 'Alerts' },
-];
+import { BarChart3 } from 'lucide-react';
 
 const Sidebar = () => {
   return (
@@ -16,22 +9,10 @@ const Sidebar = () => {
       </div>
 
       <nav className="flex-1">
-        <ul className="space-y-2">
-          {navItems.map((item) => (
-            <li key={item.label}>
-              <button
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
-                  item.active
-                    ? 'bg-blue-50 text-blue-700'
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                }`}
-              >
-                <item.icon size={18} />
-                {item.label}
-              </button>
-            </li>
-          ))}
-        </ul>
+        <div className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium bg-blue-50 text-blue-700">
+          <BarChart3 size={18} />
+          Dashboard
+        </div>
       </nav>
 
       <div className="pt-6 border-t border-gray-100">
