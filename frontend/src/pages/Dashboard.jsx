@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
+import { PoundSterling, TrendingUp, AlertTriangle } from 'lucide-react';
 import api from '../api';
-import Sidebar from '../components/layout/Sidebar';
 import Header from '../components/layout/Header';
 import KPICard from '../components/dashboard/KPICard';
 import RevenueChart from '../components/dashboard/RevenueChart';
@@ -15,7 +15,6 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [selectedMonth, setSelectedMonth] = useState('');
 
-  // Fetch all data on mount
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -36,10 +35,8 @@ const Dashboard = () => {
     fetchData();
   }, []);
 
-  // Re-fetch revenue and top products when month filter changes
   useEffect(() => {
     if (loading) return;
-
     const fetchFiltered = async () => {
       try {
         const params = selectedMonth ? { month: selectedMonth } : {};
@@ -58,8 +55,11 @@ const Dashboard = () => {
 
   if (loading) {
     return (
-      <div className="flex bg-slate-50 min-h-screen font-sans items-center justify-center">
-        <p className="text-gray-700">Loading dashboard...</p>
+      <div className="flex bg-slate-50 dark:bg-slate-900 min-h-screen font-sans items-center justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-8 h-8 border-3 border-blue-600 border-t-transparent rounded-full animate-spin" />
+          <p className="text-gray-600 dark:text-slate-400 text-sm">Loading dashboard...</p>
+        </div>
       </div>
     );
   }
@@ -91,54 +91,69 @@ const Dashboard = () => {
     : 'All stock levels healthy';
 
   return (
-    <div className="flex bg-slate-50 min-h-screen font-sans">
-      <Sidebar />
-      <div className="flex-1 flex flex-col">
-        <Header />
-        <main className="p-8">
-          <div className="mb-8 flex items-start justify-between">
-            <div>
-              <h2 className="text-2xl font-bold text-gray-900">Welcome back!</h2>
-              <p className="text-gray-600 mt-1">Here is what is happening with your store today.</p>
-            </div>
-            <MonthFilter
-              months={availableMonths}
-              selected={selectedMonth}
-              onChange={setSelectedMonth}
-            />
+    <div className="bg-slate-50 dark:bg-slate-900 min-h-screen font-sans transition-colors">
+      <Header />
+      <main className="max-w-7xl mx-auto px-6 py-8">
+        <div className="mb-8 flex items-start justify-between animate-fade-in">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Welcome back!</h2>
+            <p className="text-gray-600 dark:text-slate-400 mt-1">Here is what is happening with your store today.</p>
           </div>
+          <MonthFilter
+            months={availableMonths}
+            selected={selectedMonth}
+            onChange={setSelectedMonth}
+          />
+        </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 items-stretch">
+          <div className="animate-fade-in animate-fade-in-delay-1 flex">
             <KPICard
               title="Total Monthly Revenue"
               value={currentRevenue}
               description={revenueDesc}
               textColor="text-emerald-600"
+              icon={PoundSterling}
+              iconBg="bg-emerald-100"
+              iconColor="text-emerald-600"
             />
+          </div>
+          <div className="animate-fade-in animate-fade-in-delay-2 flex">
             <KPICard
               title="Top-Selling Product"
               value={topProductName}
               description={topProductUnits}
               textColor="text-blue-600"
+              icon={TrendingUp}
+              iconBg="bg-blue-100"
+              iconColor="text-blue-600"
             />
+          </div>
+          <div className="animate-fade-in animate-fade-in-delay-3 flex">
             <KPICard
               title="Low Stock Alerts"
               value={`${lowStockCount} Items`}
               description={lowStockDesc}
               textColor={lowStockCount > 0 ? 'text-red-600' : 'text-emerald-600'}
+              icon={AlertTriangle}
+              iconBg={lowStockCount > 0 ? 'bg-red-100' : 'bg-emerald-100'}
+              iconColor={lowStockCount > 0 ? 'text-red-600' : 'text-emerald-600'}
             />
           </div>
+        </div>
 
-          <div className="mb-8">
-            <RevenueChart data={revenue?.monthly} />
-          </div>
+        <div className="mb-8 animate-fade-in animate-fade-in-delay-4">
+          <RevenueChart data={revenue?.monthly} />
+        </div>
 
+        <div className="animate-fade-in animate-fade-in-delay-5">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Detailed Reports</h3>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <LowStockTable items={lowStock?.items} />
             <TopProductsTable rankings={topProducts?.rankings} />
           </div>
-        </main>
-      </div>
+        </div>
+      </main>
     </div>
   );
 };
