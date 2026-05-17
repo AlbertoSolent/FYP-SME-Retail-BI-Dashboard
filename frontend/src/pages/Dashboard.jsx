@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import Sidebar from '../components/layout/Sidebar';
 import Header from '../components/layout/Header';
 import KPICard from '../components/dashboard/KPICard';
@@ -20,9 +20,9 @@ const Dashboard = () => {
     const fetchData = async () => {
       try {
         const [revRes, stockRes, topRes] = await Promise.all([
-          axios.get('/api/kpis/revenue'),
-          axios.get('/api/kpis/low-stock'),
-          axios.get('/api/kpis/top-products'),
+          api.get('/api/kpis/revenue'),
+          api.get('/api/kpis/low-stock'),
+          api.get('/api/kpis/top-products'),
         ]);
         setRevenue(revRes.data);
         setLowStock(stockRes.data);
@@ -44,8 +44,8 @@ const Dashboard = () => {
       try {
         const params = selectedMonth ? { month: selectedMonth } : {};
         const [revRes, topRes] = await Promise.all([
-          axios.get('/api/kpis/revenue', { params }),
-          axios.get('/api/kpis/top-products', { params }),
+          api.get('/api/kpis/revenue', { params }),
+          api.get('/api/kpis/top-products', { params }),
         ]);
         setRevenue(revRes.data);
         setTopProducts(topRes.data);
