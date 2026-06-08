@@ -16,6 +16,7 @@ const Suggestions = () => {
   const [success, setSuccess] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const fetchSuggestions = async () => {
     try {
@@ -23,6 +24,8 @@ const Suggestions = () => {
       setSuggestions(res.data);
     } catch (err) {
       console.error('Failed to fetch suggestions:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -135,7 +138,11 @@ const Suggestions = () => {
             )}
           </h3>
 
-          {suggestions.length === 0 ? (
+          {loading ? (
+            <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 flex items-center justify-center py-16">
+              <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+            </div>
+          ) : suggestions.length === 0 ? (
             <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 p-8 text-center">
               <Lightbulb size={32} className="mx-auto text-gray-300 dark:text-slate-600 mb-3" />
               <p className="text-gray-500 dark:text-slate-400">

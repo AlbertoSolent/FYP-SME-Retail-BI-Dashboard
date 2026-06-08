@@ -22,6 +22,7 @@ const UserManagement = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [deleteTarget, setDeleteTarget] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const fetchUsers = async () => {
     try {
@@ -29,6 +30,8 @@ const UserManagement = () => {
       setUsers(res.data);
     } catch (err) {
       console.error('Failed to fetch users:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -184,6 +187,11 @@ const UserManagement = () => {
         )}
 
         <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700">
+          {loading ? (
+            <div className="flex items-center justify-center py-16">
+              <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+            </div>
+          ) : (
           <table className="w-full text-sm text-left">
             <thead>
               <tr className="border-b border-gray-200 dark:border-slate-600">
@@ -268,6 +276,7 @@ const UserManagement = () => {
               ))}
             </tbody>
           </table>
+          )}
         </div>
       </main>
 
