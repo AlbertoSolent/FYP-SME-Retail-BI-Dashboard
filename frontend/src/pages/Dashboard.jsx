@@ -110,6 +110,7 @@ const Dashboard = () => {
           <div className="animate-fade-in animate-fade-in-delay-1 flex">
             <KPICard
               title="Total Monthly Revenue"
+              subtitle="Total sales income for the selected period"
               value={currentRevenue}
               description={revenueDesc}
               textColor="text-emerald-600"
@@ -121,6 +122,7 @@ const Dashboard = () => {
           <div className="animate-fade-in animate-fade-in-delay-2 flex">
             <KPICard
               title="Top-Selling Product"
+              subtitle="Product with the highest units sold"
               value={topProductName}
               description={topProductUnits}
               textColor="text-blue-600"
@@ -132,6 +134,7 @@ const Dashboard = () => {
           <div className="animate-fade-in animate-fade-in-delay-3 flex">
             <KPICard
               title="Low Stock Alerts"
+              subtitle="Products below the reorder threshold"
               value={`${lowStockCount} Items`}
               description={lowStockDesc}
               textColor={lowStockCount > 0 ? 'text-red-600' : 'text-emerald-600'}

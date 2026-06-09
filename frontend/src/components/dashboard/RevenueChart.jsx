@@ -45,9 +45,12 @@ const RevenueChart = ({ data }) => {
 
   return (
     <div className="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 transition-colors">
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
+      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
         Revenue vs. Profit
       </h3>
+      <p className="text-xs text-gray-400 dark:text-slate-500 mb-5">
+        Blue bars show total revenue, green bars show gross profit, and the amber line indicates profit margin percentage
+      </p>
       <ResponsiveContainer width="100%" height={320}>
         <ComposedChart data={chartData}>
           <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" strokeOpacity={0.5} />
