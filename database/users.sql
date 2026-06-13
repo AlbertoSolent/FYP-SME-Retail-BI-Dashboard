@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS Users (
     name VARCHAR(100) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    role ENUM('super', 'viewer') NOT NULL DEFAULT 'normal',
+    role ENUM('super', 'viewer') NOT NULL DEFAULT 'viewer',
     is_protected BOOLEAN NOT NULL DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
